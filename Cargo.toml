@@ -1,0 +1,13 @@
+[package]
+name = "btcbc-rs"
+version = "0.1.0"
+authors = ["Sebastian Geisler <sgeisler@wh2.tu-dresden.de>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = "0.10.6"
+structopt = "0.3.15"
+tokio = "0.2.21"
+tokio-tungstenite = "0.10.1"
