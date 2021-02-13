@@ -2,9 +2,9 @@
 
 use structopt::StructOpt;
 use tokio_tungstenite::connect_async;
-use tungstenite::Message;
-use tokio::stream::StreamExt;
+use tokio_tungstenite::tungstenite::Message;
 use futures::sink::SinkExt;
+use futures::stream::StreamExt;
 
 #[derive(StructOpt)]
 struct Options {
