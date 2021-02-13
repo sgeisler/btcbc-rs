@@ -5,27 +5,11 @@ use tokio_tungstenite::connect_async;
 use tokio_tungstenite::tungstenite::Message;
 use futures::sink::SinkExt;
 use futures::stream::StreamExt;
+use btcbc::Network;
 
 #[derive(StructOpt)]
 struct Options {
     websocket: String
-}
-
-#[derive(Debug, Ord, PartialOrd, Eq, PartialEq)]
-enum Network {
-    Bitcoin,
-    Testnet,
-    Liquid,
-}
-
-impl Network {
-    fn api_endpoint(&self) -> &str {
-        match self {
-            Network::Bitcoin => "https://blockstream.info/api/tx",
-            Network::Testnet => "https://blockstream.info/testnet/api/tx",
-            Network::Liquid => "https://blockstream.info/liquid/api/tx",
-        }
-    }
 }
 
 async fn submit_tx(net: Network, tx: String) {
@@ -76,14 +60,14 @@ async fn main() {
         let (net, tx) = if parts.len() == 1 {
             (Network::Bitcoin, parts[0])
         } else if parts.len() == 2 {
-            match parts[0] {
-                "testnet" => (Network::Testnet, parts[1]),
-                "liquid" => (Network::Liquid, parts[1]),
-                net => {
-                    println!("Unknown network: {}", net);
+            let net: Network = match parts[0].parse() {
+                Ok(net) => net,
+                Err(e) => {
+                    eprintln!("{}", e);
                     continue;
                 }
-            }
+            };
+            (net, parts[1])
         } else {
             println!("Unsupported command: {:?}", command);
             continue;
