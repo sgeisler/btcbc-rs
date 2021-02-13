@@ -1,8 +1,9 @@
 [package]
 name = "btcbc"
 version = "0.1.0"
-authors = ["Sebastian Geisler <sgeisler@wh2.tu-dresden.de>"]
+authors = ["Sebastian Geisler <github@gnet.me>"]
 edition = "2018"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

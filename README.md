@@ -1,30 +1,98 @@
 # Nym Bitcoin Broadcaster
+This repository implement an anonymous Bitcoin transaction broadcasting tool on top of
+[Nym](https://github.com/nymtech/nym), a mixnet still under heavy development. So while the technology looks promising
+any anonymity claims are to be taken with a grain of salt. This project is provided as-is, it might work as expected or
+not, please don't rely on it without vetting it yourself.
 
-This is a rewrite of my [bitcoin transaction broadcaster hack](https://github.com/sgeisler/nym_btc_broadcast) in the
-hope to make it somewhat robust to be able to run it as an unattended service, something I don't really trust (my)
-python code with.
+There are two parts:
+* **Client:** connects to a nym native-client and sends a transaction to a specified server (aka service provider)
+* **Server:** listens for incoming nym packets from its nym native-client. If they are valid client requests containing
+a transaction it is broadcasted to its respective network using [blockstream.info](https://blockstream.info).
 
-To use it you have to initialize and run a [Nym client](https://nymtech.net/docs/build-peapps/native-client/):
-```
-nym-client init --id test
-nym-client run --id test
-```
+## Usage
+### Nym Native Client
+To use either one you have to initialize and run a [Nym client](https://nymtech.net/docs/build-peapps/native-client/):
 
-Then you can run the bitcoin transaction broadcasting service by just pointing it to the websocket opened by the Nym
-client:
-```
-cargo run -- ws://127.0.0.1:1977
-```
-
-Shortly after starting it will output a string like this:
-```
-Ok(Text("{\"type\":\"selfAddress\",\"address\":\"H5FfVbeSPkmCrxQ1UBSRmsUEWrogc1NoBd1VjrQ3x7FM@CuJWcKgY7ktjYrszJck2sqZoPMrc9U1BGK8Wjtrh853v\"}"))
+```bash
+nym-client init --id client
+nym-client run --id client
 ```
 
-telling you that the service's "address" is:
+If you want to run both client and server on one machine it's advisable to run two nym clients on different ports:
+
+```bash
+nym-client init --id client # default port = 1977
+nym-client init --id server --port 1978
+
+nym-client run --id client
+nym-client run --id server
+``` 
+
+### BTC-BC Client
 ```
-H5FfVbeSPkmCrxQ1UBSRmsUEWrogc1NoBd1VjrQ3x7FM@CuJWcKgY7ktjYrszJck2sqZoPMrc9U1BGK8Wjtrh853v
+btcbc 0.1.0
+
+USAGE:
+    client [OPTIONS] <service-provider> <transaction>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -n, --network <network>         [default: bitcoin]
+    -w, --websocket <websocket>     [default: ws://127.0.0.1:1977]
+
+ARGS:
+    <service-provider>    
+    <transaction>         
+
 ```
 
-Once it's running you can send messages in the form of `<hex-tx>` (Bitcoin), `testnet:<hex-tx>` (Bitcoin Testnet) and
- `liquid:<hex-tx>` (Liquid) to it and it will broadcast them via the [blockstream.info](https://blockstream.info/) API.
+If you cloned this repo, have [Rust installed](https://rustup.rs/) and initialized your nym client as shown above you
+can run the following to transmit a hex-encoded Bitcoin `<transaction>` through a service provider at `<address>`:
+
+```
+cargo run --bin client -- <address> <transaction>
+```
+
+If you want to transmit it to another network (supported networks: bitcoin, testnet, liquid), just specify the network
+flag:
+
+```
+cargo run --bin client -- --network testnet <address> <transaction>
+```
+
+### BTC-BC Server
+```
+btcbc 0.1.0
+
+USAGE:
+    server [OPTIONS]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -w, --websocket <websocket>     [default: ws://127.0.0.1:1977]
+```
+
+If you cloned this repo, have [Rust installed](https://rustup.rs/) and initialized your nym client as shown above you
+can run the following to start the server:
+
+```
+cargo run --bin server -- --websocket ws://127.0.0.1:1978
+```
+
+It will output a log message telling you its nym address:
+
+```
+Feb 13 15:07:20.291  INFO server: Listening on 2DS4Cwf3x95A4KusRDSo9g8sJaJ4Z5xqNrftPprFHbkS.8Uj4NJjUeJE15bWE6K3aazXaaWbUDk28z5ZBo52GNKHm@DiYR9o8KgeQ81woKPYVAu4LNaAEg8SWkiufDCahNnPov
+```
+
+This address has to be given as an argument to the client when sending transactions.
+
+## Debugging
+If something isn't working as expected you can use the `RUST_LOG` environment variable to enable more verbose logging
+(e.g. `RUST_LOG=debug`).
