@@ -11,7 +11,12 @@ struct Options {
     websocket: String,
     #[structopt(parse(try_from_str = Recipient::try_from_base58_string))]
     service_provider: Recipient,
-    #[structopt(short, long, default_value = "bitcoin")]
+    #[structopt(
+        short,
+        long,
+        default_value = "bitcoin",
+        help = "one of 'bitcoin', 'testnet' or 'liquid'"
+    )]
     network: Network,
     transaction: Transaction,
 }
