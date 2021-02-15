@@ -33,34 +33,38 @@ nym-client run --id server
 btcbc 0.1.0
 
 USAGE:
-    client [OPTIONS] <service-provider> <transaction>
+    client [OPTIONS] <transaction>
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
 
 OPTIONS:
-    -n, --network <network>         [default: bitcoin]
-    -w, --websocket <websocket>     [default: ws://127.0.0.1:1977]
+    -n, --network <network>                      one of 'bitcoin', 'testnet' or 'liquid' [default: bitcoin]
+    -s, --service-provider <service-provider>
+             [default:
+            HofPuWMytq5ei2jcr6neFaMtGCizakcTy7MDcVnmZcLT.2MzDd8gsKzqx8UJNEkeDy6jNPevgvKHkyub1RABt5SnA@DiYR9o8KgeQ81woKPYVAu4LNaAEg8SWkiufDCahNnPov]
+    -w, --websocket <websocket>                   [default: ws://127.0.0.1:1977]
 
 ARGS:
-    <service-provider>    
-    <transaction>         
-
+    <transaction>    
 ```
 
 If you cloned this repo, have [Rust installed](https://rustup.rs/) and initialized your nym client as shown above you
 can run the following to transmit a hex-encoded Bitcoin `<transaction>` through a service provider at `<address>`:
 
 ```
-cargo run --bin client -- <address> <transaction>
+cargo run --bin client -- -s <address> <transaction>
 ```
 
-If you want to transmit it to another network (supported networks: bitcoin, testnet, liquid), just specify the network
+There is a default service provider at `HofPuWMytq5ei2jcr6neFaMtGCizakcTy7MDcVnmZcLT.2MzDd8gsKzqx8UJNEkeDy6jNPevgvKHkyub1RABt5SnA@DiYR9o8KgeQ81woKPYVAu4LNaAEg8SWkiufDCahNnPov`
+which I run on a best-effort basis and which is chosen if the `-s` flag isn't provided. Please don't rely on it for anything critical.
+
+If you want to transmit it to another `<network>` (supported networks: bitcoin, testnet, liquid), just specify the network
 flag:
 
 ```
-cargo run --bin client -- --network testnet <address> <transaction>
+cargo run --bin client -- --network <network> -s <address> <transaction>
 ```
 
 ### BTC-BC Server
