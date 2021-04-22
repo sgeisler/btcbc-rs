@@ -43,7 +43,7 @@ OPTIONS:
     -n, --network <network>                      one of 'bitcoin', 'testnet' or 'liquid' [default: bitcoin]
     -s, --service-provider <service-provider>
              [default:
-            HofPuWMytq5ei2jcr6neFaMtGCizakcTy7MDcVnmZcLT.2MzDd8gsKzqx8UJNEkeDy6jNPevgvKHkyub1RABt5SnA@DiYR9o8KgeQ81woKPYVAu4LNaAEg8SWkiufDCahNnPov]
+            7GAmWTUr3wude4LkRBJ78UmD2QMCgQvr8RCRJHW1fUYf.DHhHL8ZcnEEFq3UKuD7E31aWdnzuWdeJv1wRicj9n6tU@AmoRv85ak8UrYkqd43NZpQJFQjn8rtgMfViBgAFaPDRh]
     -w, --websocket <websocket>                   [default: ws://127.0.0.1:1977]
 
 ARGS:
@@ -57,7 +57,7 @@ can run the following to transmit a hex-encoded Bitcoin `<transaction>` through 
 cargo run --bin client -- -s <address> <transaction>
 ```
 
-There is a default service provider at `HofPuWMytq5ei2jcr6neFaMtGCizakcTy7MDcVnmZcLT.2MzDd8gsKzqx8UJNEkeDy6jNPevgvKHkyub1RABt5SnA@DiYR9o8KgeQ81woKPYVAu4LNaAEg8SWkiufDCahNnPov`
+There is a default service provider at `7GAmWTUr3wude4LkRBJ78UmD2QMCgQvr8RCRJHW1fUYf.DHhHL8ZcnEEFq3UKuD7E31aWdnzuWdeJv1wRicj9n6tU@AmoRv85ak8UrYkqd43NZpQJFQjn8rtgMfViBgAFaPDRh`
 which I run on a best-effort basis and which is chosen if the `-s` flag isn't provided. Please don't rely on it for anything critical.
 
 If you want to transmit it to another `<network>` (supported networks: bitcoin, testnet, liquid), just specify the network

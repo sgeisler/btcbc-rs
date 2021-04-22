@@ -13,7 +13,7 @@ struct Options {
         short,
         long,
         parse(try_from_str = Recipient::try_from_base58_string),
-        default_value = "HofPuWMytq5ei2jcr6neFaMtGCizakcTy7MDcVnmZcLT.2MzDd8gsKzqx8UJNEkeDy6jNPevgvKHkyub1RABt5SnA@DiYR9o8KgeQ81woKPYVAu4LNaAEg8SWkiufDCahNnPov"
+        default_value = "7GAmWTUr3wude4LkRBJ78UmD2QMCgQvr8RCRJHW1fUYf.DHhHL8ZcnEEFq3UKuD7E31aWdnzuWdeJv1wRicj9n6tU@AmoRv85ak8UrYkqd43NZpQJFQjn8rtgMfViBgAFaPDRh"
     )]
     service_provider: Recipient,
     #[structopt(
